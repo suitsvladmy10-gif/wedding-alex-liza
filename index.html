@@ -545,17 +545,93 @@
         gap: 18px;
       }
       .program-time { font-size: 1.55rem; }
-
       .label-sasha { left: 4%; bottom: 28%; }
       .label-liza  { right: 4%; bottom: 28%; }
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(to right, #A07830, #D4B06A, #A07830);
+      z-index: 999;
+      pointer-events: none;
+      transition: width 80ms linear;
+    }
+
+    /* ── PARTICLES ── */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      will-change: transform, opacity;
+      z-index: 1;
+    }
+
+    /* ── TOUCH RIPPLE ── */
+    .ripple-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(196, 160, 96, 0.55);
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0);
+      animation: rippleOut 1.4s cubic-bezier(0.15, 0.8, 0.35, 1) forwards;
+      z-index: 2;
+    }
+    @keyframes rippleOut {
+      0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(1);   opacity: 0; }
+    }
+
+    /* ── DRESSCODE SWIPE ON MOBILE ── */
+    @media (max-width: 620px) {
+      .dresscode-row {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+        cursor: grab;
+      }
+      .dresscode-row::-webkit-scrollbar { display: none; }
+      .color-swatch {
+        flex: 0 0 72vw;
+        scroll-snap-align: center;
+      }
+      .swatch-block { height: 180px; }
+      .dresscode-swipe-hint {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+      }
+      .dresscode-swipe-hint::before,
+      .dresscode-swipe-hint::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+    }
+    @media (min-width: 621px) {
+      .dresscode-swipe-hint { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <div class="scroll-progress" id="scroll-progress"></div>
+
   <!-- HERO -->
-  <div class="hero">
-    <div class="hero-bg"></div>
+  <div class="hero" id="hero">
+    <div class="hero-bg" id="hero-bg"></div>
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
@@ -647,6 +723,7 @@
   <section>
     <p class="section-label reveal">Дресс-код</p>
 
+    <div class="dresscode-swipe-hint">свайп</div>
     <div class="dresscode-row">
       <div class="color-swatch reveal reveal-delay-1">
         <div class="swatch-block swatch-black"></div>
@@ -709,39 +786,129 @@
   </div>
 
   <script>
-    // Scroll reveal
-    const observer = new IntersectionObserver((entries) => {
+    // ── SCROLL REVEAL ──
+    const revealObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-    // Countdown
+    // ── COUNTDOWN ──
     function tick() {
-      const target = new Date('2026-08-08T20:00:00+03:00');
-      const diff = target - new Date();
+      const diff = new Date('2026-08-08T20:00:00+03:00') - new Date();
       if (diff <= 0) return;
-      const d = Math.floor(diff / 864e5);
-      const h = Math.floor((diff % 864e5) / 36e5);
-      const m = Math.floor((diff % 36e5) / 6e4);
-      document.getElementById('cd-days').textContent = d;
-      document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
-      document.getElementById('cd-minutes').textContent = String(m).padStart(2, '0');
+      document.getElementById('cd-days').textContent = Math.floor(diff / 864e5);
+      document.getElementById('cd-hours').textContent = String(Math.floor((diff % 864e5) / 36e5)).padStart(2,'0');
+      document.getElementById('cd-minutes').textContent = String(Math.floor((diff % 36e5) / 6e4)).padStart(2,'0');
     }
-    tick();
-    setInterval(tick, 30000);
+    tick(); setInterval(tick, 30000);
 
-    // Calendar link
+    // ── CALENDAR ──
     document.getElementById('cal-link').href =
       'https://calendar.google.com/calendar/render?action=TEMPLATE' +
       '&text=Свадьба+Александра+и+Елизаветы' +
       '&dates=20260808T143000Z/20260808T210000Z' +
       '&details=17:30+Сбор,+Кривоколенный+пер.+9с3%0A20:00+«Богема»,+Селиверстов+пер.+1/26' +
       '&location=Москва,+Селиверстов+переулок+1/26';
+
+    // ── SCROLL PROGRESS BAR ──
+    const bar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      bar.style.width = Math.min(pct, 100) + '%';
+    }, { passive: true });
+
+    // ── PARTICLES IN HERO ──
+    const hero = document.getElementById('hero');
+    const PARTICLE_COUNT = 22;
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size   = Math.random() * 4 + 1.5;
+      const isGold = Math.random() > 0.45;
+      const opacity = Math.random() * 0.45 + 0.12;
+      const blur   = Math.random() > 0.65 ? 1 : 0;
+      p.style.cssText = [
+        `width:${size}px`, `height:${size}px`,
+        `left:${Math.random() * 100}%`,
+        `bottom:-8px`,
+        `background:rgba(${isGold ? '196,160,96' : '255,255,255'},${opacity.toFixed(2)})`,
+        blur ? `filter:blur(${blur}px)` : ''
+      ].filter(Boolean).join(';');
+
+      const drift    = (Math.random() - 0.5) * 120;
+      const duration = (Math.random() * 9 + 9) * 1000;
+      const delay    = Math.random() * 10000;
+      p.animate([
+        { transform: 'translateY(0) translateX(0)',                     opacity: 0 },
+        { transform: `translateY(-15vh) translateX(${drift * 0.2}px)`,  opacity: opacity * 2, offset: 0.06 },
+        { transform: `translateY(-80vh) translateX(${drift * 0.8}px)`,  opacity: opacity,     offset: 0.9 },
+        { transform: `translateY(-105vh) translateX(${drift}px)`,       opacity: 0 }
+      ], { duration, delay, iterations: Infinity, easing: 'linear' });
+
+      hero.appendChild(p);
+    }
+
+    // ── GYROSCOPE PARALLAX (mobile) ──
+    const heroBg = document.getElementById('hero-bg');
+    let gyroOn = false;
+    let tiltX = 0, tiltY = 0;
+
+    function applyParallax(x, y) {
+      heroBg.style.transition = 'transform 0.4s ease-out';
+      heroBg.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+    }
+
+    if (window.DeviceOrientationEvent) {
+      const handler = (e) => {
+        if (e.gamma === null) return;
+        gyroOn = true;
+        tiltX = Math.max(-1, Math.min(1, e.gamma / 22)) * 14;
+        tiltY = Math.max(-1, Math.min(1, ((e.beta || 45) - 45) / 28)) * 10;
+        applyParallax(tiltX, tiltY);
+      };
+      // iOS 13+ requires permission
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        document.addEventListener('touchend', () => {
+          DeviceOrientationEvent.requestPermission().then(state => {
+            if (state === 'granted') window.addEventListener('deviceorientation', handler, true);
+          }).catch(() => {});
+        }, { once: true });
+      } else {
+        window.addEventListener('deviceorientation', handler, true);
+      }
+    }
+
+    // ── MOUSE PARALLAX (desktop) ──
+    hero.addEventListener('mousemove', (e) => {
+      if (gyroOn) return;
+      const r = hero.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width  - 0.5) * 22;
+      const y = ((e.clientY - r.top)  / r.height - 0.5) * 16;
+      heroBg.style.transition = 'transform 0.12s ease-out';
+      heroBg.style.transform  = `scale(1.1) translate(${x}px, ${y}px)`;
+    }, { passive: true });
+    hero.addEventListener('mouseleave', () => {
+      if (gyroOn) return;
+      heroBg.style.transition = 'transform 0.9s ease';
+      heroBg.style.transform  = 'scale(1.06)';
+    });
+
+    // ── TOUCH RIPPLE ──
+    hero.addEventListener('touchstart', (e) => {
+      const t   = e.touches[0];
+      const r   = hero.getBoundingClientRect();
+      const x   = t.clientX - r.left;
+      const y   = t.clientY - r.top;
+      [90, 160, 240].forEach((size, i) => {
+        const ring = document.createElement('div');
+        ring.className = 'ripple-ring';
+        ring.style.cssText = `left:${x}px;top:${y}px;width:${size}px;height:${size}px;animation-delay:${i * 0.18}s`;
+        hero.appendChild(ring);
+        setTimeout(() => ring.remove(), 1600 + i * 180);
+      });
+    }, { passive: true });
   </script>
 </body>
 </html>
