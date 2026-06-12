@@ -578,6 +578,58 @@
       }
     }
 
+    /* ── MUSIC BUTTON ── */
+    .music-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      z-index: 998;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(196, 160, 96, 0.5);
+      background: rgba(25, 20, 16, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .music-btn:hover {
+      border-color: var(--gold);
+      background: rgba(25, 20, 16, 0.95);
+    }
+    .music-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--gold);
+      transition: opacity 0.2s;
+    }
+    .music-btn .icon-pause { display: none; }
+
+    .music-btn.playing .icon-play  { display: none; }
+    .music-btn.playing .icon-pause { display: block; }
+
+    /* pulse ring when playing */
+    .music-btn::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(196, 160, 96, 0);
+      transition: border-color 0.3s;
+    }
+    .music-btn.playing::before {
+      border-color: rgba(196, 160, 96, 0.25);
+      animation: musicPulse 2s ease-in-out infinite;
+    }
+    @keyframes musicPulse {
+      0%, 100% { transform: scale(1);    opacity: 1; }
+      50%       { transform: scale(1.18); opacity: 0.5; }
+    }
+
     /* ── SCROLL PROGRESS ── */
     .scroll-progress {
       position: fixed;
@@ -663,6 +715,15 @@
 <body>
 
   <div class="scroll-progress" id="scroll-progress"></div>
+
+  <audio id="bg-audio" loop preload="none" src="music.mp3"></audio>
+
+  <button class="music-btn" id="music-btn" aria-label="Воспроизвести музыку">
+    <!-- play icon -->
+    <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <!-- pause icon -->
+    <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
 
   <!-- HERO -->
   <div class="hero" id="hero">
@@ -844,6 +905,19 @@
   </div>
 
   <script>
+    // ── MUSIC ──
+    const audio = document.getElementById('bg-audio');
+    const musicBtn = document.getElementById('music-btn');
+    musicBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        musicBtn.classList.add('playing');
+      } else {
+        audio.pause();
+        musicBtn.classList.remove('playing');
+      }
+    });
+
     // ── SCROLL REVEAL ──
     const revealObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
