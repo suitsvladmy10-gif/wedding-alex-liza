@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Александр & Елизавета — 08.08.2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #09080C;
+      --bg-2: #100F14;
+      --text: #E8E2D5;
+      --text-muted: rgba(232, 226, 213, 0.5);
+      --blue: #6B8FAB;
+      --brown: #8B7055;
+      --gold: #C4A97A;
+      --line: rgba(232, 226, 213, 0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100dvh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/photo1.jpg');
+      background-size: cover;
+      background-position: center 20%;
+      transform: scale(1.08);
+      animation: heroScale 20s ease-out forwards;
+      will-change: transform;
+    }
+
+    @keyframes heroScale {
+      to { transform: scale(1); }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(9, 8, 12, 0.55) 0%,
+        rgba(9, 8, 12, 0.3) 40%,
+        rgba(9, 8, 12, 0.65) 80%,
+        rgba(9, 8, 12, 1) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      padding: 0 24px;
+      animation: heroFade 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes heroFade {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      animation: heroFade 1.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.2rem, 14vw, 8rem);
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      animation: heroFade 1.8s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-names em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-amp {
+      display: block;
+      font-size: 0.55em;
+      color: var(--text-muted);
+      margin: 0.15em 0;
+    }
+
+    .hero-date {
+      margin-top: 36px;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      animation: heroFade 1.8s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      animation: heroFade 2s 1.2s ease both;
+    }
+
+    .hero-scroll span {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section {
+      padding: clamp(64px, 12vw, 120px) clamp(24px, 6vw, 80px);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+
+    /* ── FULL WIDTH PHOTO ── */
+    .photo-break {
+      width: 100%;
+      max-width: none;
+      padding: 0;
+      height: clamp(300px, 60vw, 600px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-break img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      filter: brightness(0.85) contrast(1.05);
+    }
+
+    .photo-break-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(9, 8, 12, 0.6) 0%,
+        transparent 30%,
+        transparent 70%,
+        rgba(9, 8, 12, 0.8) 100%
+      );
+    }
+
+    /* ── PROGRAM ── */
+    .program-grid {
+      display: grid;
+      gap: 2px;
+    }
+
+    .program-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 32px;
+      padding: 36px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+    }
+
+    .program-item:first-child {
+      border-top: 1px solid var(--line);
+    }
+
+    .program-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      padding-top: 4px;
+    }
+
+    .program-info {}
+
+    .program-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .program-place {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .program-metro {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(107, 143, 171, 0.3);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .program-metro:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+
+    /* ── DRESS CODE ── */
+    .dresscode-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .swatch-block {
+      height: 160px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swatch-block::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+    }
+
+    .swatch-black { background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 60%, #252525 100%); }
+    .swatch-brown { background: linear-gradient(135deg, #7a5c40 0%, #5c3d25 60%, #8b6848 100%); }
+    .swatch-taupe { background: linear-gradient(135deg, #8b7a6a 0%, #6b5a4a 60%, #9b8a7a 100%); }
+    .swatch-dark-brown { background: linear-gradient(135deg, #4a3020 0%, #2a1a10 60%, #5a3a28 100%); }
+
+    .swatch-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+
+    .swatch-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .dresscode-note {
+      margin-top: 40px;
+      padding: 28px 32px;
+      border: 1px solid var(--line);
+      border-left: 2px solid var(--gold);
+      background: rgba(196, 169, 122, 0.04);
+    }
+
+    .dresscode-note p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* ── DETAILS ── */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 560px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .detail-card {
+      padding: 32px;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+    }
+
+    .detail-card:first-child {
+      border-right: none;
+    }
+
+    @media (max-width: 560px) {
+      .detail-card:first-child {
+        border-right: 1px solid var(--line);
+        border-bottom: none;
+      }
+    }
+
+    .detail-icon {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .detail-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+
+    .detail-text {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* ── DATE HERO BLOCK ── */
+    .date-block {
+      text-align: center;
+      padding: clamp(64px, 10vw, 100px) clamp(24px, 6vw, 80px);
+      background: var(--bg-2);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .date-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 22vw, 14rem);
+      font-weight: 300;
+      line-height: 0.85;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(196, 169, 122, 0.35);
+      letter-spacing: -0.02em;
+      display: block;
+    }
+
+    .date-text {
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 24px;
+    }
+
+    /* ── MAP LINK ── */
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .map-link:hover { color: var(--text); }
+
+    .map-link svg {
+      width: 12px;
+      height: 12px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 64px 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-year {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ── COUNTDOWN ── */
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: clamp(20px, 5vw, 60px);
+      margin: 48px 0;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      text-align: center;
+    }
+
+    .countdown-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--text);
+      display: block;
+    }
+
+    .countdown-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .countdown-divider {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: var(--line);
+      align-self: flex-start;
+      padding-top: 8px;
+    }
+
+    /* ── CALENDAR BTN ── */
+    .cal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 32px;
+      padding: 14px 28px;
+      border: 1px solid rgba(196, 169, 122, 0.35);
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+
+    .cal-btn:hover {
+      background: rgba(196, 169, 122, 0.08);
+      border-color: var(--gold);
+      color: var(--text);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .program-item {
+        grid-template-columns: 70px 1fr;
+        gap: 20px;
+      }
+      .program-time {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Свадьба</p>
+      <h1 class="hero-names">
+        Александр
+        <span class="hero-amp">&amp;</span>
+        <em>Елизавета</em>
+      </h1>
+      <p class="hero-date">08 · 08 · 2026 · Москва</p>
+    </div>
+    <div class="hero-scroll">
+      <span>Листай</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <!-- DATE BLOCK -->
+  <div class="date-block">
+    <span class="date-number reveal">08.08</span>
+    <p class="date-text reveal reveal-delay-1">Суббота, 8 августа 2026</p>
+  </div>
+
+  <!-- PROGRAM -->
+  <section>
+    <p class="section-label reveal">Программа</p>
+
+    <div class="program-grid">
+      <div class="program-item reveal reveal-delay-1">
+        <div class="program-time">16:00</div>
+        <div class="program-info">
+          <h2 class="program-title">Фотосессия</h2>
+          <p class="program-place">
+            Чистопрудный бульвар<br>
+            Встречаемся, гуляем, фотографируемся
+          </p>
+          <a class="program-metro" href="https://yandex.ru/maps/?text=Чистопрудный+бульвар+Москва" target="_blank" rel="noopener">
+            м. Чистые пруды
+          </a>
+        </div>
+      </div>
+
+      <div class="program-item reveal reveal-delay-2">
+        <div class="program-time">20:00</div>
+        <div class="program-info">
+          <h2 class="program-title">«Богема»</h2>
+          <p class="program-place">
+            Селиверстов переулок, 1А<br>
+            Вечер, фуршет, музыка
+          </p>
+          <a class="program-metro" href="https://yandex.ru/maps/?text=Селиверстов+переулок+1А+Москва" target="_blank" rel="noopener">
+            м. Сухаревская
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO BREAK -->
+  <div class="photo-break reveal">
+    <img src="images/photo2.jpg" alt="Александр и Елизавета" loading="lazy">
+    <div class="photo-break-overlay"></div>
+  </div>
+
+  <!-- DRESS CODE -->
+  <section>
+    <p class="section-label reveal">Дресс-код</p>
+
+    <div class="dresscode-row">
+      <div class="color-swatch reveal reveal-delay-1">
+        <div class="swatch-block swatch-black"></div>
+        <p class="swatch-name">Чёрный</p>
+        <p class="swatch-hint">От глубокого до угольного</p>
+      </div>
+      <div class="color-swatch reveal reveal-delay-2">
+        <div class="swatch-block swatch-brown"></div>
+        <p class="swatch-name">Шоколадный</p>
+        <p class="swatch-hint">Тёмный коричневый</p>
+      </div>
+      <div class="color-swatch reveal reveal-delay-3">
+        <div class="swatch-block swatch-taupe"></div>
+        <p class="swatch-name">Тауп</p>
+        <p class="swatch-hint">Тёплый серо-коричневый</p>
+      </div>
+      <div class="color-swatch reveal reveal-delay-4">
+        <div class="swatch-block swatch-dark-brown"></div>
+        <p class="swatch-name">Мокко</p>
+        <p class="swatch-hint">Тёмный кофейный</p>
+      </div>
+    </div>
+
+    <div class="dresscode-note reveal">
+      <p>Оттенки чёрного и коричневого во всех их проявлениях. Строгих рамок нет — главное, чтобы вам было комфортно и красиво.</p>
+    </div>
+  </section>
+
+  <!-- DETAILS -->
+  <section style="padding-top: 0;">
+    <p class="section-label reveal">Детали</p>
+
+    <div class="details-grid">
+      <div class="detail-card reveal reveal-delay-1">
+        <span class="detail-icon">◈</span>
+        <h3 class="detail-title">Подарки</h3>
+        <p class="detail-text">Самый универсальный и любимый подарок — наличные. Так мы потратим их именно на то, что нужно.</p>
+      </div>
+      <div class="detail-card reveal reveal-delay-2">
+        <span class="detail-icon">◇</span>
+        <h3 class="detail-title">Еда &amp; напитки</h3>
+        <p class="detail-text">Фуршетный формат — множество блюд на любой вкус. Напитки — по ситуации и настроению вечера.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER / COUNTDOWN -->
+  <footer>
+    <div class="countdown reveal" id="countdown">
+      <div class="countdown-item">
+        <span class="countdown-value" id="cd-days">—</span>
+        <span class="countdown-label">Дней</span>
+      </div>
+      <span class="countdown-divider">·</span>
+      <div class="countdown-item">
+        <span class="countdown-value" id="cd-hours">—</span>
+        <span class="countdown-label">Часов</span>
+      </div>
+      <span class="countdown-divider">·</span>
+      <div class="countdown-item">
+        <span class="countdown-value" id="cd-minutes">—</span>
+        <span class="countdown-label">Минут</span>
+      </div>
+    </div>
+
+    <p class="footer-names">Александр &amp; Елизавета</p>
+    <p class="footer-year">08 · 08 · 2026</p>
+
+    <a class="cal-btn" href="#" id="cal-link">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Добавить в календарь
+    </a>
+  </footer>
+
+  <script>
+    // Intersection Observer for reveal animations
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Countdown to 08.08.2026 20:00 Moscow time
+    function updateCountdown() {
+      const target = new Date('2026-08-08T20:00:00+03:00');
+      const now = new Date();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById('cd-days').textContent = '0';
+        document.getElementById('cd-hours').textContent = '0';
+        document.getElementById('cd-minutes').textContent = '0';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      document.getElementById('cd-days').textContent = days;
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 30000);
+
+    // Google Calendar link
+    document.getElementById('cal-link').href =
+      'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      '&text=Свадьба+Александра+и+Елизаветы' +
+      '&dates=20260808T170000Z/20260809T000000Z' +
+      '&details=16:00+Фотосессия,+м.+Чистые+пруды%0A20:00+Ресторан+«Богема»,+Селиверстов+пер.+1А' +
+      '&location=Москва,+Селиверстов+переулок+1А';
+  </script>
+</body>
+</html>
