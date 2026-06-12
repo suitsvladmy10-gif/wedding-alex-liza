@@ -553,14 +553,19 @@
 
       .hero-content {
         width: 54%;
+        max-width: 54%;
+        box-sizing: border-box;
         align-self: center;
         text-align: left;
         padding-left: clamp(48px, 8vw, 120px);
-        padding-right: 40px;
+        padding-right: 48px;
         margin-bottom: 0;
       }
 
-      .hero-names { font-size: clamp(3rem, 5.5vw, 6rem); }
+      .hero-names {
+        font-size: clamp(2.6rem, 4.8vw, 5.2rem);
+        word-break: keep-all;
+      }
 
       .hero-countdown {
         justify-content: flex-start;
