@@ -399,41 +399,10 @@
       transform: rotate(-135deg);
     }
 
-    /* ── DRESS CODE ── */
-    .dresscode-row {
-      display: flex;
-      gap: 16px;
-      margin-top: 36px;
-      flex-wrap: wrap;
-    }
-
-    .color-swatch {
-      flex: 1;
-      min-width: 120px;
-    }
-
-    .swatch-block {
-      height: 140px;
-      border-radius: 6px;
-      margin-bottom: 12px;
-      border: 1px solid rgba(232, 221, 208, 0.08);
-    }
-
     .swatch-black       { background: linear-gradient(145deg, #1a1a1a, #0d0d0d); }
     .swatch-brown       { background: linear-gradient(145deg, #6B4530, #4A2E1A); }
     .swatch-taupe       { background: linear-gradient(145deg, #8B7A6A, #6A5A4A); }
     .swatch-dark-brown  { background: linear-gradient(145deg, #3D2418, #2A1510); }
-
-    .swatch-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      margin-bottom: 2px;
-    }
-
-    .swatch-hint {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
 
     .dresscode-note {
       margin-top: 32px;
@@ -585,43 +554,53 @@
       100% { transform: translate(-50%, -50%) scale(1);   opacity: 0; }
     }
 
-    /* ── DRESSCODE SWIPE ON MOBILE ── */
-    @media (max-width: 620px) {
-      .dresscode-row {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 8px;
-        scrollbar-width: none;
-        cursor: grab;
-      }
-      .dresscode-row::-webkit-scrollbar { display: none; }
-      .color-swatch {
-        flex: 0 0 72vw;
-        scroll-snap-align: center;
-      }
-      .swatch-block { height: 180px; }
-      .dresscode-swipe-hint {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 10px;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        margin-bottom: 16px;
-      }
-      .dresscode-swipe-hint::before,
-      .dresscode-swipe-hint::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: var(--line);
-      }
+    /* ── DRESSCODE TICKER ── */
+    .dresscode-outer {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      padding: 4px 0 16px;
+      -webkit-mask: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
     }
-    @media (min-width: 621px) {
-      .dresscode-swipe-hint { display: none; }
+
+    .dresscode-track {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+      animation: dressTicker 22s linear infinite;
+    }
+
+    .dresscode-track:hover,
+    .dresscode-track.paused {
+      animation-play-state: paused;
+    }
+
+    @keyframes dressTicker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .color-swatch {
+      flex: 0 0 140px;
+    }
+
+    .swatch-block {
+      height: 110px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(232, 221, 208, 0.08);
+    }
+
+    .swatch-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .swatch-hint {
+      font-size: 11px;
+      color: var(--text-muted);
     }
   </style>
 </head>
@@ -723,27 +702,50 @@
   <section>
     <p class="section-label reveal">Дресс-код</p>
 
-    <div class="dresscode-swipe-hint">свайп</div>
-    <div class="dresscode-row">
-      <div class="color-swatch reveal reveal-delay-1">
-        <div class="swatch-block swatch-black"></div>
-        <p class="swatch-name">Чёрный</p>
-        <p class="swatch-hint">Любой оттенок</p>
-      </div>
-      <div class="color-swatch reveal reveal-delay-2">
-        <div class="swatch-block swatch-brown"></div>
-        <p class="swatch-name">Коричневый</p>
-        <p class="swatch-hint">Тёплые тона</p>
-      </div>
-      <div class="color-swatch reveal reveal-delay-3">
-        <div class="swatch-block swatch-taupe"></div>
-        <p class="swatch-name">Тауп</p>
-        <p class="swatch-hint">Серо-коричневый</p>
-      </div>
-      <div class="color-swatch reveal reveal-delay-4">
-        <div class="swatch-block swatch-dark-brown"></div>
-        <p class="swatch-name">Мокко</p>
-        <p class="swatch-hint">Кофейный</p>
+    <div class="dresscode-outer reveal">
+      <div class="dresscode-track" id="dresscode-track">
+        <!-- set 1 -->
+        <div class="color-swatch">
+          <div class="swatch-block swatch-black"></div>
+          <p class="swatch-name">Чёрный</p>
+          <p class="swatch-hint">Любой оттенок</p>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block swatch-brown"></div>
+          <p class="swatch-name">Коричневый</p>
+          <p class="swatch-hint">Тёплые тона</p>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block swatch-taupe"></div>
+          <p class="swatch-name">Тауп</p>
+          <p class="swatch-hint">Серо-коричневый</p>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block swatch-dark-brown"></div>
+          <p class="swatch-name">Мокко</p>
+          <p class="swatch-hint">Кофейный</p>
+        </div>
+        <!-- set 2 (duplicate for seamless loop) -->
+        <div class="color-swatch">
+          <div class="swatch-block swatch-black"></div>
+          <p class="swatch-name">Чёрный</p>
+          <p class="swatch-hint">Любой оттенок</p>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block swatch-brown"></div>
+          <p class="swatch-name">Коричневый</p>
+          <p class="swatch-hint">Тёплые тона</p>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block swatch-taupe"></div>
+          <p class="swatch-name">Тауп</p>
+          <p class="swatch-hint">Серо-коричневый</p>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block swatch-dark-brown"></div>
+          <p class="swatch-name">Мокко</p>
+          <p class="swatch-hint">Кофейный</p>
+        </div>
       </div>
     </div>
 
@@ -803,6 +805,13 @@
       document.getElementById('cd-minutes').textContent = String(Math.floor((diff % 36e5) / 6e4)).padStart(2,'0');
     }
     tick(); setInterval(tick, 30000);
+
+    // ── DRESSCODE TICKER PAUSE ON TOUCH ──
+    const track = document.getElementById('dresscode-track');
+    if (track) {
+      track.addEventListener('touchstart', () => track.classList.add('paused'),    { passive: true });
+      track.addEventListener('touchend',   () => track.classList.remove('paused'), { passive: true });
+    }
 
     // ── CALENDAR ──
     document.getElementById('cal-link').href =
