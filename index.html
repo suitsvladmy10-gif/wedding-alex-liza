@@ -571,10 +571,6 @@
       animation: dressTicker 22s linear infinite;
     }
 
-    .dresscode-track:hover,
-    .dresscode-track.paused {
-      animation-play-state: paused;
-    }
 
     @keyframes dressTicker {
       0%   { transform: translateX(0); }
@@ -806,13 +802,6 @@
     }
     tick(); setInterval(tick, 30000);
 
-    // ── DRESSCODE TICKER PAUSE ON TOUCH ──
-    const track = document.getElementById('dresscode-track');
-    if (track) {
-      track.addEventListener('touchstart', () => track.classList.add('paused'),    { passive: true });
-      track.addEventListener('touchend',   () => track.classList.remove('paused'), { passive: true });
-    }
-
     // ── CALENDAR ──
     document.getElementById('cal-link').href =
       'https://calendar.google.com/calendar/render?action=TEMPLATE' +
@@ -859,39 +848,9 @@
       hero.appendChild(p);
     }
 
-    // ── GYROSCOPE PARALLAX (mobile) ──
+    // ── MOUSE PARALLAX (desktop only) ──
     const heroBg = document.getElementById('hero-bg');
-    let gyroOn = false;
-    let tiltX = 0, tiltY = 0;
-
-    function applyParallax(x, y) {
-      heroBg.style.transition = 'transform 0.4s ease-out';
-      heroBg.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
-    }
-
-    if (window.DeviceOrientationEvent) {
-      const handler = (e) => {
-        if (e.gamma === null) return;
-        gyroOn = true;
-        tiltX = Math.max(-1, Math.min(1, e.gamma / 22)) * 14;
-        tiltY = Math.max(-1, Math.min(1, ((e.beta || 45) - 45) / 28)) * 10;
-        applyParallax(tiltX, tiltY);
-      };
-      // iOS 13+ requires permission
-      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-        document.addEventListener('touchend', () => {
-          DeviceOrientationEvent.requestPermission().then(state => {
-            if (state === 'granted') window.addEventListener('deviceorientation', handler, true);
-          }).catch(() => {});
-        }, { once: true });
-      } else {
-        window.addEventListener('deviceorientation', handler, true);
-      }
-    }
-
-    // ── MOUSE PARALLAX (desktop) ──
     hero.addEventListener('mousemove', (e) => {
-      if (gyroOn) return;
       const r = hero.getBoundingClientRect();
       const x = ((e.clientX - r.left) / r.width  - 0.5) * 22;
       const y = ((e.clientY - r.top)  / r.height - 0.5) * 16;
@@ -899,7 +858,6 @@
       heroBg.style.transform  = `scale(1.1) translate(${x}px, ${y}px)`;
     }, { passive: true });
     hero.addEventListener('mouseleave', () => {
-      if (gyroOn) return;
       heroBg.style.transition = 'transform 0.9s ease';
       heroBg.style.transform  = 'scale(1.06)';
     });
