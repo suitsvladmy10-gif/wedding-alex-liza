@@ -529,6 +529,50 @@
       .label-liza  { right: 4%; bottom: 28%; }
     }
 
+    /* ── DESKTOP HERO: SPLIT LAYOUT ── */
+    @media (min-width: 900px) {
+      .hero-bg {
+        inset: unset;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 46%;
+        background-position: center 28%;
+        background-size: cover;
+      }
+
+      .hero-overlay {
+        background: linear-gradient(
+          to right,
+          rgba(25, 20, 16, 1)    0%,
+          rgba(25, 20, 16, 0.92) 40%,
+          rgba(25, 20, 16, 0.3)  65%,
+          rgba(25, 20, 16, 0)    100%
+        );
+      }
+
+      .hero-content {
+        width: 54%;
+        align-self: center;
+        text-align: left;
+        padding-left: clamp(48px, 8vw, 120px);
+        padding-right: 40px;
+        margin-bottom: 0;
+      }
+
+      .hero-names { font-size: clamp(3rem, 5.5vw, 6rem); }
+
+      .hero-countdown {
+        justify-content: flex-start;
+      }
+
+      .hero-scroll {
+        left: clamp(48px, 8vw, 120px);
+        right: auto;
+        align-items: flex-start;
+      }
+    }
+
     /* ── SCROLL PROGRESS ── */
     .scroll-progress {
       position: fixed;
