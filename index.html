@@ -552,18 +552,20 @@
       }
 
       .hero-content {
-        width: 54%;
-        max-width: 54%;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 52%;
         box-sizing: border-box;
-        align-self: center;
         text-align: left;
-        padding-left: clamp(48px, 8vw, 120px);
-        padding-right: 48px;
+        padding-left: clamp(48px, 8vw, 110px);
+        padding-right: 40px;
         margin-bottom: 0;
       }
 
       .hero-names {
-        font-size: clamp(2.6rem, 4.8vw, 5.2rem);
+        font-size: clamp(2.4rem, 4.2vw, 5rem);
         word-break: keep-all;
       }
 
@@ -572,9 +574,10 @@
       }
 
       .hero-scroll {
-        left: clamp(48px, 8vw, 120px);
+        left: clamp(48px, 8vw, 110px);
         right: auto;
         align-items: flex-start;
+        transform: none;
       }
     }
 
